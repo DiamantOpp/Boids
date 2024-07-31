@@ -8,14 +8,14 @@ import java.awt.AlphaComposite;
 
 class Main extends JFrame {
     private JPanel panel;
-    private Boid[] boids = new Boid[500];
+    private Boid[] boids = new Boid[750];
 
     private int frame;
     private int fps_c;
     public int FPS;
 
     /* CUSTOMIZABLE */
-    private final double TARGET_SPEED = 9;
+    private final double TARGET_SPEED = 4.5;
     private final double RESOLVE = 0.1;
     private final double RANGE = 125;
     private final double SEPARATION = 0.5;
@@ -33,7 +33,7 @@ class Main extends JFrame {
             public void paint(Graphics g) {
                 // super.paint(g);
                 Graphics2D g2D = (Graphics2D) g;
-                g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+                g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
                 g2D.setColor(java.awt.Color.BLACK);
                 g2D.fillRect(0, 0, getWidth(), getHeight());
                 int i = -1;
@@ -55,9 +55,10 @@ class Main extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
+        setTitle("Boids Simulation");
         setVisible(true);
 
-        new Timer(1000/60, e -> {
+        new Timer(1000/120, e -> {
             step();
             panel.repaint();
         }).start();
@@ -65,6 +66,7 @@ class Main extends JFrame {
         new Timer(1000, e -> {
             FPS = fps_c;
             fps_c = 0;
+            setTitle("Boids Simulation - " + String.valueOf(FPS) + " FPS");
         }).start();
     }
 
