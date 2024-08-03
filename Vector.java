@@ -10,6 +10,8 @@ public class Vector {
     public float Yf() { return (float)Y; }
     public int Xi() { return (int)X; }
     public int Yi() { return (int)Y; }
+    public String Xs() { return String.valueOf(X); }
+    public String Ys() { return String.valueOf(Y); }
 
     public Vector add(Vector other) { return new Vector(X + other.X, Y + other.Y); }
     public Vector sub(Vector other) { return new Vector(X - other.X, Y - other.Y); }

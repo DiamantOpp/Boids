@@ -10,6 +10,8 @@ public class Boid {
     public double direction = Math.random()*Math.PI*2;
     public double size = 50;
 
+    public Boid[] visibleBoids;
+
     Boid() {}
 
     Boid(double size) {
@@ -33,8 +35,9 @@ public class Boid {
 
     public void recolor(int frame) { color = new Color(Color.HSBtoRGB(((float)frame/240) % 1, 1, 1)); }
 
+    public void updateVisibleBoids(Boid[] boids) { visibleBoids = boids; }
+
     public void draw(Graphics2D g2D, int[] debug, boolean dodebug) {
-        g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
         Vector p1 = position.move(0, size/2, direction); /* tip */
         Vector p2 = position.move(size/4, -size/2, direction); /* back-right 'fin' */
         Vector p3 = position.move(0, -size/3.5f, direction); /* back-center */
@@ -44,13 +47,20 @@ public class Boid {
         p.addPoint((int)p2.X(), (int)p2.Y());
         p.addPoint((int)p3.X(), (int)p3.Y());
         p.addPoint((int)p4.X(), (int)p4.Y());
-        g2D.setColor(Color.GREEN);
-        if (dodebug)
-            g2D.fillOval(position.Xi()-debug[2]/2, position.Yi()-debug[2]/2, debug[2], debug[2]); /* range */
+        // g2D.setColor(Color.GREEN);
+        // g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .05f));
+        // if (dodebug)
+        //     g2D.fillOval(position.Xi()-debug[2], position.Yi()-debug[2], debug[2]*2, debug[2]*2); /* range */
+        g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
+        g2D.setColor(Color.YELLOW);
+        if (dodebug) {
+            g2D.drawLine(position.Xi(), position.Yi(), debug[0], debug[1]); /* trajectory */
+            if (visibleBoids != null && visibleBoids.length > 0)
+            for (Boid boid : visibleBoids)
+            g2D.drawLine(position.Xi(), position.Yi(), boid.position.Xi(), boid.position.Yi()); /* thoughts */
+        }
+        g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
         g2D.setColor(dodebug? Color.RED : color);
         g2D.fillPolygon(p);
-        g2D.setColor(Color.YELLOW);
-        if (dodebug)
-            g2D.drawLine(position.Xi(), position.Yi(), debug[0], debug[1]); /* trajectory */
     }
 }
